@@ -1,6 +1,6 @@
-Title : A Retrospective on Region-Based Memory Management
+##Title : A Retrospective on Region-Based Memory Management
 
-Link : http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=92F4C364284417DD25BF96CEABB69D18?doi=10.1.1.64.160&rep=rep1&type=pdf
+##Link : http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=92F4C364284417DD25BF96CEABB69D18?doi=10.1.1.64.160&rep=rep1&type=pdf
 
 Summary: This paper looks back at the origin and development of the region based memory management discipline. The fundamental inspiration of Region based memory management is the Algol stack discipline. Stack discipline can provide better cache locality and lesser fragmentation than heap allocation(Although theoretically heap allocation is more efficient than stack allocation [1]). The stack discipline essentially stores the memory proportional to the depth of the call stack unlike heap allocation which could theoretically store the entire call tree.
 
