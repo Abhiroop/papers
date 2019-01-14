@@ -81,5 +81,5 @@ Suggested future work involves: Investigating the use of infinite regions by usi
 
 
  
-[1] Garbage collection can be faster than stack allocation. - Andrew Appel. [Link](ftp://ftp.cs.princeton.edu/reports/1986/045.pdf)
+[1] Garbage collection can be faster than stack allocation. - Andrew Appel. [Link](https://goo.gl/vnTvdq)
 
