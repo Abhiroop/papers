@@ -1,6 +1,6 @@
 ## Title : A Retrospective on Region-Based Memory Management
 
-## Link : http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=92F4C364284417DD25BF96CEABB69D18?doi=10.1.1.64.160&rep=rep1&type=pdf
+## [Link](http://citeseerx.ist.psu.edu/viewdoc/download;jsessionid=92F4C364284417DD25BF96CEABB69D18?doi=10.1.1.64.160&rep=rep1&type=pdf)
 
 Summary: This paper looks back at the origin and development of the region based memory management discipline. The fundamental inspiration of Region based memory management is the Algol stack discipline. Stack discipline can provide better cache locality and lesser fragmentation than heap allocation(Although theoretically heap allocation is more efficient than stack allocation [1]). The stack discipline essentially stores the memory proportional to the depth of the call stack unlike heap allocation which could theoretically store the entire call tree.
 
@@ -45,13 +45,41 @@ Followed by that `storage mode analysis` was developed which allowed the compile
 
 ### MLKit
 ---------
+In MLKit the runtime system represented regions by linked lists of fixed size region pages because the size of each region was not known and could potentially be unknown. Experiments revealed that many regions only ever contained one value. Such regions were placed on the stack rather than allocating region pages for them.
+
+`Multiplicity inference analysis` was developed which finds out **upper bound on the number of values written into a region.** Experiments showed that region size was generally one or infinite(bound could not be determinded). As a result the finite regions were part of the activation record while an infinite region was a linked list of fixed size region pages, allocated from a free list of region pages.
 
 
+For proving the correctness of region inference algorithms two different algos evolved:
 
+1. syntax directed and based on algorithm W and fixed point iterating for dealing with polymorphic recursion.
+2. constraint based
+
+Second was faster and more space consuming. Hence the first one was chose.
+
+
+Followed by that a region profiler was developed.
+
+
+### Modules and separate compilation
+------------------------------------
+
+A scheme based on the `static interpretation of modules`, where the module language was regarded as a linking language, was developed. Type checking happenned but the code generation was delayed until the application of the functor. Delaying code generation until functor application time was not feasible for large programs unless it was integrated with a mechanism for avoiding unneccesary recompilation of program units and functor bodies upon change of source code. To solve this problem, the static interpretation of modules scheme collected information, which for each program unit or functor body told which other units it depended on. Such information included region type schemes for free identifiers of the program unit. Upon modification of a program unit, the scheme used the collected information to determine, for each program unit and each
+functor application, if recompilation was necessary.
+
+### GC and Regions
+------------------
+
+The idea was to perform a Cheney copying collection of all regions on the region stack but to do it in such a way that two live values in the same region remained in the same region even after the copying GC finished. The region typing rules automatically prevents dangling pointers.
+
+Experiments showed that what strategy to use (i.e., region inference alone, garbage collection alone, or a combination of the two) is not a clear cut and depends on the program. However, the combination of region inference and garbage collection did give the programmer the flexibility to either optimise for regions or choose not to and instead use the garbage collector as a fall-back opportunity.
+
+
+Suggested future work involves: Investigating the use of infinite regions by using a single infinite region and using a more sophisticated (generational collector). Instead of garbage collecting at a function point we should collect at each allocation point. Another possibility is to explicitly use region annotations, something which the Cyclone project is experimenting with.
 
 
 
 
  
-[1] Garbage collection can be faster than stack allocation. - Andrew Appel. Link: ftp://ftp.cs.princeton.edu/reports/1986/045.pdf
+[1] Garbage collection can be faster than stack allocation. - Andrew Appel. [Link](ftp://ftp.cs.princeton.edu/reports/1986/045.pdf)
 
